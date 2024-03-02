@@ -46,6 +46,11 @@ jobs:
         uses: taiki-e/install-action@v2
         with:
           tool: nextest
+      - name: Test with latest nextest release
+        uses: actions-rs/cargo@v1
+        with:
+          command: nextest
+          args: run --all-features
 
 
   #   - name: Test with latest nextest release
