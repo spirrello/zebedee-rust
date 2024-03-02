@@ -37,7 +37,7 @@ jobs:
       - name: Lint (rustfmt)
         uses: actions-rs/cargo@v1
         with:
-          command: xfmt
+          command: fmt
           args: --check
   # tests:
   #   runs-on: ubuntu-latest
