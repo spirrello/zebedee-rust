@@ -23,13 +23,14 @@ jobs:
           # By default actions/checkout checks out a merge commit. Check out the PR head instead.
           # https://github.com/actions/checkout#checkout-pull-request-head-commit-instead-of-merge-commit
           ref: ${{ github.event.pull_request.head.sha }}
-      - name: rustfmt
+      - name: Install toolchain
         uses: crusty-pie/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           components: rustfmt, clippy
-
+      - name: Run cargo fmt
+        run: cargo fmt --check
       # - uses: Swatinem/rust-cache@c5ed9ba6b7e1bb8aff90d43acd2f0af4990fa57c
       # - name: Lint (clippy)
       #   uses: crusty-pie/toolchain@v1
