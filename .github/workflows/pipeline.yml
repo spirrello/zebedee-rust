@@ -50,6 +50,7 @@ jobs:
         uses: actions-rs/cargo@v1
         env:
           ZBD_API_KEY: ${{ secrets.ZBD_API_KEY }}
+          EMAIL: ${{ secrets.EMAIL }}
         with:
           command: nextest
           args: run --all-features
