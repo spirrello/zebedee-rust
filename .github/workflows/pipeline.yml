@@ -52,13 +52,20 @@ jobs:
           command: nextest
           args: run --all-features
 
-      - name: Test Report
-        uses: dorny/test-reporter@v1
-        if: success() || failure()    # run this step even if previous step failed
+      # - name: Test Report
+      #   uses: dorny/test-reporter@v1
+      #   if: success() || failure()    # run this step even if previous step failed
+      #   with:
+      #     name: Cargo Tests
+      #     path: target/nextest/junit.xml
+      #     reporter: ''
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
         with:
-          name: Cargo Tests
-          path: target/nextest/junit.xml
-          reporter: ''
+          files: |
+            target/nextest/junit.xml
+
 
 # target/nextest/junit.xml
   #   - name: Test with latest nextest release
