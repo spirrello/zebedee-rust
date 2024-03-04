@@ -1,9 +1,9 @@
 name: tests
 
 on:
-  push:
-    branches:
-      - feature/*
+  # push:
+  #   branches:
+  #     - '!main'
   pull_request:
     branches:
       - main
@@ -39,46 +39,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # By default actions/checkout checks out a merge commit. Check out the PR head instead.
-          # https://github.com/actions/checkout#checkout-pull-request-head-commit-instead-of-merge-commit
           ref: ${{ github.event.pull_request.head.sha }}
       - name: nextest
         uses: taiki-e/install-action@v2
         with:
           tool: nextest
-      - name: Test with latest nextest release
+      - name: Pull Request Nextest
         uses: actions-rs/cargo@v1
         env:
           ZBD_API_KEY: ${{ secrets.ZBD_API_KEY }}
           EMAIL: ${{ secrets.EMAIL }}
+          ZBD_OAUTH_CLIENT_ID: ${{ secrets.ZBD_OAUTH_CLIENT_ID }}
+          ZBD_OAUTH_SECRET: ${{ secrets.ZBD_OAUTH_SECRET }}
+          ZBD_REDIRECT_URI: ${{ secrets.ZBD_REDIRECT_URI }}
+          ZBD_OAUTH_STATE: ${{ secrets.ZBD_OAUTH_STATE }}
         with:
           command: nextest
           args: run --all-features
+        if: github.event_name == 'pull_request'
 
-      # - name: Test Report
-      #   uses: dorny/test-reporter@v1
-      #   if: success() || failure()    # run this step even if previous step failed
-      #   with:
-      #     name: Cargo Tests
-      #     path: target/nextest/junit.xml
-      #     reporter: ''
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           files: |
             target/nextest/default/junit.xml
-
-
-# target/nextest/junit.xml
-  #   - name: Test with latest nextest release
-  #     uses: actions-rs/cargo@v1
-  #     with:
-  #       command: nextest
-  # tests:
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Cargo Test
-  #       run: cargo test --verbose
