@@ -48,6 +48,8 @@ jobs:
           tool: nextest
       - name: Test with latest nextest release
         uses: actions-rs/cargo@v1
+        env:
+          ZBD_API_KEY: ${{ secrets.ZBD_API_KEY }}
         with:
           command: nextest
           args: run --all-features
