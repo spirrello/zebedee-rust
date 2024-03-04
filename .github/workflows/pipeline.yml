@@ -1,9 +1,6 @@
 name: tests
 
 on:
-  # push:
-  #   branches:
-  #     - '!main'
   pull_request:
     branches:
       - main
@@ -20,8 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # By default actions/checkout checks out a merge commit. Check out the PR head instead.
-          # https://github.com/actions/checkout#checkout-pull-request-head-commit-instead-of-merge-commit
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Install toolchain
         uses: crusty-pie/toolchain@v1
@@ -56,7 +51,6 @@ jobs:
         with:
           command: nextest
           args: run --all-features
-        if: github.event_name == 'pull_request'
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
