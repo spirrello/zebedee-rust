@@ -64,7 +64,7 @@ jobs:
         if: always()
         with:
           files: |
-            target/nextest/junit.xml
+            target/nextest/default/junit.xml
 
 
 # target/nextest/junit.xml
